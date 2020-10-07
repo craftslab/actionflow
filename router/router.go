@@ -13,13 +13,22 @@
 package router
 
 import (
+	"context"
+	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 
 	"actionflow/config"
+)
+
+const (
+	timeout = 5 * time.Second
 )
 
 type Router struct {
@@ -62,7 +71,7 @@ func (r *Router) setupRoute() error {
 }
 
 func (r Router) runRouter(addr string) error {
-	s := &http.Server{
+	srv := &http.Server{
 		Addr:           addr,
 		Handler:        r.router,
 		ReadTimeout:    10 * time.Second,
@@ -70,9 +79,31 @@ func (r Router) runRouter(addr string) error {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	if err := s.ListenAndServe(); err != nil {
-		return errors.Wrap(err, "failed to listen and serve")
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("failed to listen and serve: %v", err)
+		}
+	}()
+
+	// Wait for interrupt signal to gracefully shutdown the server with a timeout of 5 seconds.
+	quit := make(chan os.Signal, 1)
+
+	// kill (no param) default send syscanll.SIGTERM
+	// kill -2 is syscall.SIGINT
+	// kill -9 is syscall.SIGKILL but can"t be caught, so don't need add it
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+
+	log.Println("shutdown server...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		return errors.Wrap(err, "failed to shutdown")
 	}
+
+	<-ctx.Done()
 
 	return nil
 }

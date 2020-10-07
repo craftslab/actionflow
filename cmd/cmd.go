@@ -39,7 +39,7 @@ func Run() {
 		log.Fatalf("failed to run server: %v", err)
 	}
 
-	log.Println("server finished.")
+	log.Println("server exiting")
 }
 
 func initConfig() (config.Config, error) {
