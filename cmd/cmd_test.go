@@ -22,3 +22,8 @@ func TestInitConfig(t *testing.T) {
 	_, err := initConfig()
 	assert.Equal(t, nil, err)
 }
+
+func TestInitDoc(t *testing.T) {
+	err := initDoc()
+	assert.Equal(t, nil, err)
+}

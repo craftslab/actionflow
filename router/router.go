@@ -45,7 +45,7 @@ func Run(addr string, cfg *config.Config) error {
 		return errors.Wrap(err, "failed to init")
 	}
 
-	if err := r.setupRoute(); err != nil {
+	if err := r.setRoute(); err != nil {
 		return errors.Wrap(err, "failed to route")
 	}
 
@@ -64,7 +64,7 @@ func (r *Router) initRouter(cfg *config.Config) error {
 	return nil
 }
 
-func (r *Router) setupRoute() error {
+func (r *Router) setRoute() error {
 	r.engine.GET("/ping", func(c *gin.Context) {
 		c.String(http.StatusOK, "pong")
 	})

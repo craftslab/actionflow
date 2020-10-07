@@ -29,7 +29,7 @@ func TestRunRouter(t *testing.T) {
 	err := r.initRouter(&c)
 	assert.Equal(t, nil, err)
 
-	err = r.setupRoute()
+	err = r.setRoute()
 	assert.Equal(t, nil, err)
 
 	w := httptest.NewRecorder()
