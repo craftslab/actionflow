@@ -33,9 +33,9 @@ func TestRunRouter(t *testing.T) {
 	assert.Equal(t, nil, err)
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/server/version", nil)
+	req, _ := http.NewRequest("GET", "/config/server/version", nil)
 	r.engine.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, config.Version+"-build-"+config.Build, w.Body.String())
+	assert.Equal(t, "\""+config.Version+"-build-"+config.Build+"\"", w.Body.String())
 }
