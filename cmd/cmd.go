@@ -14,16 +14,19 @@ package cmd
 
 import (
 	"log"
+	"net/http"
 	"os"
+	"time"
 
+	"github.com/gin-gonic/gin"
 	"gopkg.in/alecthomas/kingpin.v2"
 
 	"actionflow/config"
 )
 
 var (
-	app = kingpin.New("actionflow", "Action Flow").Author(Author).Version(Version)
-	_   = app.Flag("addr", "Server listen address").Default(":9090").String()
+	app  = kingpin.New("actionflow", "Action Flow").Author(Author).Version(Version)
+	addr = app.Flag("addr", "Server listen address").Default(":9090").String()
 )
 
 func Run() {
@@ -34,11 +37,9 @@ func Run() {
 		log.Fatalf("failed to init config: %v", err)
 	}
 
-	if err := runServer(&cfg); err != nil {
-		log.Fatalf("failed to run server: %v", err)
-	}
+	runServer(&cfg)
 
-	log.Println("lintflow finished.")
+	log.Println("server finished.")
 }
 
 func initConfig() (config.Config, error) {
@@ -47,6 +48,28 @@ func initConfig() (config.Config, error) {
 	return cfg, nil
 }
 
-func runServer(cfg *config.Config) error {
-	return nil
+func runServer(cfg *config.Config) {
+	s := &http.Server{
+		Addr:           *addr,
+		Handler:        setupRouter(),
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
+		MaxHeaderBytes: 1 << 20,
+	}
+
+	if err := s.ListenAndServe(); err != nil {
+		log.Fatalf("failed to run server: %v", err)
+	}
+}
+
+func setupRouter() *gin.Engine {
+	gin.SetMode(gin.ReleaseMode)
+
+	r := gin.Default()
+
+	r.GET("/ping", func(c *gin.Context) {
+		c.String(http.StatusOK, "pong")
+	})
+
+	return r
 }
