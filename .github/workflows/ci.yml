@@ -41,7 +41,7 @@ jobs:
           go-version: 1.15
       - name: Run tests
         run: make.exe test
-        continue-on-error: false
+        continue-on-error: true
   tests-on-macos:
     needs: golangci-lint
     runs-on: macos-latest
