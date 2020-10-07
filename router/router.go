@@ -30,27 +30,30 @@ type Router struct {
 func Run(addr string, cfg *config.Config) error {
 	r := Router{}
 
-	if err := r.init(cfg); err != nil {
+	if err := r.initRouter(cfg); err != nil {
 		return errors.Wrap(err, "failed to init")
 	}
 
-	if err := r.route(); err != nil {
+	if err := r.setupRoute(); err != nil {
 		return errors.Wrap(err, "failed to route")
 	}
 
-	return r.run(addr)
+	return r.runRouter(addr)
 }
 
-func (r *Router) init(cfg *config.Config) error {
+func (r *Router) initRouter(cfg *config.Config) error {
 	gin.SetMode(gin.ReleaseMode)
 
 	r.config = *cfg
-	r.router = gin.Default()
+
+	r.router = gin.New()
+	r.router.Use(gin.Logger())
+	r.router.Use(gin.Recovery())
 
 	return nil
 }
 
-func (r *Router) route() error {
+func (r *Router) setupRoute() error {
 	r.router.GET("/ping", func(c *gin.Context) {
 		c.String(http.StatusOK, "pong")
 	})
@@ -58,7 +61,7 @@ func (r *Router) route() error {
 	return nil
 }
 
-func (r Router) run(addr string) error {
+func (r Router) runRouter(addr string) error {
 	s := &http.Server{
 		Addr:           addr,
 		Handler:        r.router,

@@ -22,14 +22,14 @@ import (
 	"actionflow/config"
 )
 
-func TestRun(t *testing.T) {
+func TestRunRouter(t *testing.T) {
 	c := config.Config{}
 	r := Router{}
 
-	err := r.init(&c)
+	err := r.initRouter(&c)
 	assert.Equal(t, nil, err)
 
-	err = r.route()
+	err = r.setupRoute()
 	assert.Equal(t, nil, err)
 
 	w := httptest.NewRecorder()
