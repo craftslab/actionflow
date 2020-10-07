@@ -16,15 +16,14 @@ import (
 	"log"
 	"os"
 
-	"github.com/pkg/errors"
 	"gopkg.in/alecthomas/kingpin.v2"
 
-	"../config"
+	"actionflow/config"
 )
 
 var (
-	app      = kingpin.New("actionflow", "Action Flow").Author(Author).Version(Version)
-	_ = app.Flag("addr", "Server listen address").Default(":9090").String()
+	app = kingpin.New("actionflow", "Action Flow").Author(Author).Version(Version)
+	_   = app.Flag("addr", "Server listen address").Default(":9090").String()
 )
 
 func Run() {
