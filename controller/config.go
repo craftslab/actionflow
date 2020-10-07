@@ -27,8 +27,7 @@ import (
 // @Tags config
 // @Accept json
 // @Produce json
-// @Param
-// @Success 200 {object} model.Config
+// @Success 200 {object} string
 // @Failure 400 {object} util.HTTPError
 // @Failure 404 {object} util.HTTPError
 // @Failure 500 {object} util.HTTPError
