@@ -24,7 +24,7 @@ import (
 // @termsOfService https://example.com/terms/
 
 // @contact.name ActionFlow
-// @contact.url https://example.com/support
+// @contact.url https://github.com/craftslab/actionview
 // @contact.email support@example.com
 
 // @license.name Apache 2.0

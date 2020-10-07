@@ -21,7 +21,7 @@ var doc = `{
         "termsOfService": "https://example.com/terms/",
         "contact": {
             "name": "ActionFlow",
-            "url": "https://example.com/support",
+            "url": "https://github.com/craftslab/actionflow",
             "email": "support@example.com"
         },
         "license": {

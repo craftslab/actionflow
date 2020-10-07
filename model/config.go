@@ -16,6 +16,10 @@ import (
 	"actionflow/config"
 )
 
+var (
+	Version = config.Version + "-build-" + config.Build
+)
+
 func ServerVersion() (string, error) {
-	return config.Version + "-build-" + config.Build, nil
+	return Version, nil
 }
