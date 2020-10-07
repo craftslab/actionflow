@@ -25,5 +25,3 @@ matrix:
         - cd $TRAVIS_BUILD_DIR/
         - golangci-lint run
         - $GOPATH/bin/goveralls -service=travis-ci
-        - CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -ldflags="-s -w" -o bin/actionflow main.go
-        - CGO_ENABLED=0 GOARCH=amd64 GOOS=windows go build -ldflags="-s -w" -o bin/actionflow.exe main.go
