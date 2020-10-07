@@ -14,14 +14,12 @@ package cmd
 
 import (
 	"log"
-	"net/http"
 	"os"
-	"time"
 
-	"github.com/gin-gonic/gin"
 	"gopkg.in/alecthomas/kingpin.v2"
 
 	"actionflow/config"
+	"actionflow/router"
 )
 
 var (
@@ -37,39 +35,19 @@ func Run() {
 		log.Fatalf("failed to init config: %v", err)
 	}
 
-	runServer(&cfg)
+	if err := runServer(&cfg); err != nil {
+		log.Fatalf("failed to run server: %v", err)
+	}
 
 	log.Println("server finished.")
 }
 
 func initConfig() (config.Config, error) {
-	cfg := config.NewConfig()
+	c := config.NewConfig()
 
-	return cfg, nil
+	return c, nil
 }
 
-func runServer(cfg *config.Config) {
-	s := &http.Server{
-		Addr:           *addr,
-		Handler:        setupRouter(),
-		ReadTimeout:    10 * time.Second,
-		WriteTimeout:   10 * time.Second,
-		MaxHeaderBytes: 1 << 20,
-	}
-
-	if err := s.ListenAndServe(); err != nil {
-		log.Fatalf("failed to run server: %v", err)
-	}
-}
-
-func setupRouter() *gin.Engine {
-	gin.SetMode(gin.ReleaseMode)
-
-	r := gin.Default()
-
-	r.GET("/ping", func(c *gin.Context) {
-		c.String(http.StatusOK, "pong")
-	})
-
-	return r
+func runServer(cfg *config.Config) error {
+	return router.Run(*addr, cfg)
 }

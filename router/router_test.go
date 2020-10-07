@@ -10,15 +10,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmd
+package router
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"actionflow/config"
 )
 
-func TestInitConfig(t *testing.T) {
-	_, err := initConfig()
+func TestRun(t *testing.T) {
+	c := config.Config{}
+	r := Router{}
+
+	err := r.init(&c)
 	assert.Equal(t, nil, err)
+
+	err = r.route()
+	assert.Equal(t, nil, err)
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/ping", nil)
+	r.router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "pong", w.Body.String())
 }

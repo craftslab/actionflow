@@ -1,6 +1,6 @@
 #!/bin/bash
 
-list="cmd,config"
+list="cmd,router"
 
 go env -w GOPROXY=https://goproxy.cn,direct
 
