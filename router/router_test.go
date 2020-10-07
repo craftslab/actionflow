@@ -19,7 +19,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"actionflow/cmd"
 	"actionflow/config"
 )
 
@@ -38,5 +37,5 @@ func TestRunRouter(t *testing.T) {
 	r.engine.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, cmd.Version, w.Body.String())
+	assert.Equal(t, config.Version+"-build-"+config.Build, w.Body.String())
 }

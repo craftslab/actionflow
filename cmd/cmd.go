@@ -24,7 +24,7 @@ import (
 )
 
 var (
-	app  = kingpin.New("actionflow", "Action Flow").Author(Author).Version(Version)
+	app  = kingpin.New("actionflow", "Action Flow").Version(config.Version + "-build-" + config.Build)
 	addr = app.Flag("addr", "Server listen address").Default(":9090").String()
 )
 

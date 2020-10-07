@@ -13,9 +13,9 @@
 package model
 
 import (
-	"actionflow/cmd"
+	"actionflow/config"
 )
 
 func ServerVersion() (string, error) {
-	return cmd.Version, nil
+	return config.Version + "-build-" + config.Build, nil
 }

@@ -68,15 +68,11 @@ func (r *Router) initRouter(cfg *config.Config) error {
 func (r *Router) setRoute() error {
 	ctrl := controller.NewController()
 
-	accounts := ctrl.Group("/accounts")
-	{
-		accounts.GET(":id", ctrl.GetAccount)
-	}
+	accounts := r.engine.Group("/accounts")
+	accounts.GET(":id", ctrl.GetAccount)
 
-	cfg := ctrl.Group("/config")
-	{
-		cfg.GET("server/version", ctrl.GetServerVersion)
-	}
+	cfg := r.engine.Group("/config")
+	cfg.GET("server/version", ctrl.GetServerVersion)
 
 	r.engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

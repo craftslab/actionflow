@@ -15,6 +15,11 @@ package config
 type Config struct {
 }
 
+var (
+	Build   string
+	Version string
+)
+
 func NewConfig() Config {
 	return Config{}
 }
