@@ -19,6 +19,7 @@ import (
 	"gopkg.in/alecthomas/kingpin.v2"
 
 	"actionflow/config"
+	"actionflow/docs"
 	"actionflow/router"
 )
 
@@ -35,6 +36,10 @@ func Run() {
 		log.Fatalf("failed to init config: %v", err)
 	}
 
+	if err := initDoc(); err != nil {
+		log.Fatalf("failed to init doc: %v", err)
+	}
+
 	if err := runServer(&cfg); err != nil {
 		log.Fatalf("failed to run server: %v", err)
 	}
@@ -46,6 +51,14 @@ func initConfig() (config.Config, error) {
 	c := config.NewConfig()
 
 	return c, nil
+}
+
+func initDoc() error {
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Host = *addr
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
+
+	return nil
 }
 
 func runServer(cfg *config.Config) error {

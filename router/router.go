@@ -23,6 +23,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
 
 	"actionflow/config"
 )
@@ -33,7 +35,7 @@ const (
 
 type Router struct {
 	config config.Config
-	router *gin.Engine
+	engine *gin.Engine
 }
 
 func Run(addr string, cfg *config.Config) error {
@@ -55,17 +57,19 @@ func (r *Router) initRouter(cfg *config.Config) error {
 
 	r.config = *cfg
 
-	r.router = gin.New()
-	r.router.Use(gin.Logger())
-	r.router.Use(gin.Recovery())
+	r.engine = gin.New()
+	r.engine.Use(gin.Logger())
+	r.engine.Use(gin.Recovery())
 
 	return nil
 }
 
 func (r *Router) setupRoute() error {
-	r.router.GET("/ping", func(c *gin.Context) {
+	r.engine.GET("/ping", func(c *gin.Context) {
 		c.String(http.StatusOK, "pong")
 	})
+
+	r.engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return nil
 }
@@ -73,7 +77,7 @@ func (r *Router) setupRoute() error {
 func (r Router) runRouter(addr string) error {
 	srv := &http.Server{
 		Addr:           addr,
-		Handler:        r.router,
+		Handler:        r.engine,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,

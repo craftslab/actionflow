@@ -14,6 +14,9 @@ clean: go-clean
 lint: go-lint
 .PHONY: lint
 
+swag: go-swag
+.PHONY: swag
+
 test: go-test
 .PHONY: test
 
@@ -27,6 +30,9 @@ go-clean: FORCE
 
 go-lint: FORCE
 	./script/lint.sh
+
+go-swag: FORCE
+	./script/swag.sh
 
 go-test: FORCE
 	./script/test.sh
