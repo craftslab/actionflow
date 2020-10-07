@@ -27,6 +27,7 @@ import (
 	"github.com/swaggo/gin-swagger"
 
 	"actionflow/config"
+	"actionflow/controller"
 )
 
 const (
@@ -65,9 +66,17 @@ func (r *Router) initRouter(cfg *config.Config) error {
 }
 
 func (r *Router) setRoute() error {
-	r.engine.GET("/ping", func(c *gin.Context) {
-		c.String(http.StatusOK, "pong")
-	})
+	ctrl := controller.NewController()
+
+	accounts := ctrl.Group("/accounts")
+	{
+		accounts.GET(":id", ctrl.GetAccount)
+	}
+
+	cfg := ctrl.Group("/config")
+	{
+		cfg.GET("server/version", ctrl.GetServerVersion)
+	}
 
 	r.engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

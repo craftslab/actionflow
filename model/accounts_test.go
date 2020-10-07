@@ -10,33 +10,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package router
+package model
 
 import (
-	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
-	"actionflow/cmd"
-	"actionflow/config"
 )
 
-func TestRunRouter(t *testing.T) {
-	c := config.Config{}
-	r := Router{}
+func TestAccountOne(t *testing.T) {
+	_, err := AccountOne(-1)
+	assert.NotEqual(t, nil, err)
 
-	err := r.initRouter(&c)
+	_, err = AccountOne(1)
 	assert.Equal(t, nil, err)
-
-	err = r.setRoute()
-	assert.Equal(t, nil, err)
-
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/server/version", nil)
-	r.engine.ServeHTTP(w, req)
-
-	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, cmd.Version, w.Body.String())
 }

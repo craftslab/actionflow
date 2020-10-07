@@ -10,33 +10,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package router
+package util
 
 import (
-	"net/http"
-	"net/http/httptest"
-	"testing"
-
-	"github.com/stretchr/testify/assert"
-
-	"actionflow/cmd"
-	"actionflow/config"
+	"github.com/gin-gonic/gin"
 )
 
-func TestRunRouter(t *testing.T) {
-	c := config.Config{}
-	r := Router{}
+type HTTPError struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+}
 
-	err := r.initRouter(&c)
-	assert.Equal(t, nil, err)
+func NewError(ctx *gin.Context, status int, err error) {
+	e := HTTPError{
+		Code:    status,
+		Message: err.Error(),
+	}
 
-	err = r.setRoute()
-	assert.Equal(t, nil, err)
-
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/server/version", nil)
-	r.engine.ServeHTTP(w, req)
-
-	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, cmd.Version, w.Body.String())
+	ctx.JSON(status, e)
 }
