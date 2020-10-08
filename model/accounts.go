@@ -41,7 +41,7 @@ var accounts = []Account{
 	},
 }
 
-func AccountOne(id int) (Account, error) {
+func GetAccount(id int) (Account, error) {
 	for _, v := range accounts {
 		if id == v.Id {
 			return v, nil

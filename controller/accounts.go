@@ -42,7 +42,7 @@ func (c *Controller) GetAccount(ctx *gin.Context) {
 		return
 	}
 
-	account, err := model.AccountOne(id)
+	account, err := model.GetAccount(id)
 	if err != nil {
 		util.NewError(ctx, http.StatusNotFound, err)
 		return

@@ -19,9 +19,9 @@ import (
 )
 
 func TestAccountOne(t *testing.T) {
-	_, err := AccountOne(-1)
+	_, err := GetAccount(-1)
 	assert.NotEqual(t, nil, err)
 
-	_, err = AccountOne(1)
+	_, err = GetAccount(1)
 	assert.Equal(t, nil, err)
 }
