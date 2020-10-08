@@ -25,7 +25,12 @@ See *[Action View](https://github.com/craftslab/actionview/)* as a view of *Acti
 ## Running
 
 ```bash
-TODO
+git clone https://github.com/craftslab/actionflow.git
+
+cd actionflow
+make build
+
+./bin/actionflow --addr="localhost:9090"
 ```
 
 
@@ -33,7 +38,14 @@ TODO
 ## Usage
 
 ```bash
-TODO
+usage: actionflow [<flags>]
+
+Action Flow
+
+Flags:
+  --help          Show context-sensitive help (also try --help-long and --help-man).
+  --version       Show application version.
+  --addr=":9090"  Server listen address
 ```
 
 
