@@ -56,14 +56,21 @@ Flags:
 
 
 
-## License
-
-Project License can be found [here](LICENSE).
-
-
-
 ## Reference
 
 - [Concourse](https://concourse-ci.org)
 - [Cycloid](https://cycloid.io)
 - [Terraform](https://www.terraform.io)
+
+
+
+## Thanks
+
+- [JWT in Gin](https://juejin.im/post/6844903905424310279)
+- [Swaggo](https://github.com/swaggo/swag/tree/master/example)
+
+
+
+## License
+
+Project License can be found [here](LICENSE).
