@@ -26,18 +26,18 @@ type Account struct {
 
 var accounts = []Account{
 	{
-		DisplayName: "Super John",
-		Email:       "john.doe@example.com",
+		DisplayName: "Administrator",
+		Email:       "",
 		Id:          1,
-		Name:        "John Doe",
-		UserName:    "john",
+		Name:        "Administrator",
+		UserName:    "admin",
 	},
 	{
-		DisplayName: "Super Jack",
-		Email:       "jack.chen@example.com",
+		DisplayName: "Super John",
+		Email:       "john.doe@example.com",
 		Id:          2,
-		Name:        "Jack Chen",
-		UserName:    "jack",
+		Name:        "John Doe",
+		UserName:    "john",
 	},
 }
 
@@ -49,4 +49,20 @@ func GetAccount(id int) (Account, error) {
 	}
 
 	return Account{}, errors.New("invalid id")
+}
+
+func QueryAccount(q string) ([]Account, error) {
+	if q == "" {
+		return []Account{}, errors.New("invalid query")
+	}
+
+	var buf []Account
+
+	for k, v := range accounts {
+		if q == v.UserName {
+			buf = append(buf, accounts[k])
+		}
+	}
+
+	return buf, nil
 }

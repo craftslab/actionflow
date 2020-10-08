@@ -71,6 +71,7 @@ func (r *Router) setRoute() error {
 
 	accounts := r.engine.Group("/accounts")
 	accounts.GET(":id", ctrl.GetAccount)
+	accounts.GET("/", ctrl.QueryAccount)
 
 	auth := r.engine.Group("/auth")
 	auth.GET("login", ctrl.GetLogin)

@@ -24,4 +24,10 @@ func TestAccountOne(t *testing.T) {
 
 	_, err = GetAccount(1)
 	assert.Equal(t, nil, err)
+
+	_, err = QueryAccount("")
+	assert.NotEqual(t, nil, err)
+
+	_, err = QueryAccount("admin")
+	assert.Equal(t, nil, err)
 }

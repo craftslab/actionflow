@@ -36,6 +36,7 @@ import (
 // @Router /accounts/{id} [get]
 func (c *Controller) GetAccount(ctx *gin.Context) {
 	_id := ctx.Param("id")
+
 	id, err := strconv.Atoi(_id)
 	if err != nil {
 		util.NewError(ctx, http.StatusBadRequest, err)
@@ -49,4 +50,28 @@ func (c *Controller) GetAccount(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, account)
+}
+
+// QueryAccount godoc
+// @Summary Query account
+// @Description Query account
+// @Tags accounts
+// @Accept json
+// @Produce json
+// @Param q query string true "Username search by q"
+// @Success 200 {array} model.Account
+// @Failure 400 {object} util.HTTPError
+// @Failure 404 {object} util.HTTPError
+// @Failure 500 {object} util.HTTPError
+// @Router /accounts [get]
+func (c *Controller) QueryAccount(ctx *gin.Context) {
+	q := ctx.Request.URL.Query().Get("q")
+
+	accounts, err := model.QueryAccount(q)
+	if err != nil {
+		util.NewError(ctx, http.StatusNotFound, err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, accounts)
 }
