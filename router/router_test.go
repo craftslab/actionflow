@@ -13,6 +13,7 @@
 package router
 
 import (
+	"encoding/base64"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -23,6 +24,11 @@ import (
 )
 
 func TestRunRouter(t *testing.T) {
+	auth := func(user, pass string) string {
+		base := user + ":" + pass
+		return "Basic " + base64.StdEncoding.EncodeToString([]byte(base))
+	}
+
 	c := config.Config{}
 	r := Router{}
 
@@ -33,7 +39,16 @@ func TestRunRouter(t *testing.T) {
 	assert.Equal(t, nil, err)
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/config/server/version", nil)
+	req, _ := http.NewRequest("GET", "/login", nil)
+	req.Header.Set("Authorization", auth("admin", "admin"))
+	r.engine.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "admin", w.Body.String())
+
+	w = httptest.NewRecorder()
+	req, _ = http.NewRequest("GET", "/config/server/version", nil)
+	req.Header.Set("Authorization", auth("admin", "admin"))
 	r.engine.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusOK, w.Code)
