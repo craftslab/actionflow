@@ -1,7 +1,7 @@
 #!/bin/bash
 
 build=$(date +%FT%T%z)
-version="v0.0.1"
+version="$1"
 
 ldflags="-s -w -X actionflow/config.Build=$build -X actionflow/config.Version=$version"
 target="actionflow"

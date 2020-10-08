@@ -1,9 +1,11 @@
-.DEFAULT_GOAL = test
-.PHONY: FORCE
+# Config
 
-export GOPROXY = https://goproxy.cn,direct
+VERSION=$(version)
+
 
 # Build
+
+.PHONY: FORCE
 
 build: go-build
 .PHONY: build
@@ -20,10 +22,11 @@ swag: go-swag
 test: go-test
 .PHONY: test
 
+
 # Non-PHONY targets (real files)
 
 go-build: FORCE
-	./script/build.sh
+	./script/build.sh $(VERSION)
 
 go-clean: FORCE
 	./script/clean.sh
