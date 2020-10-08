@@ -14,39 +14,28 @@ package controller
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
-
-	"actionflow/model"
-	"actionflow/util"
 )
 
-// GetAccount godoc
-// @Summary Get account by ID
-// @Description Get account by ID
-// @Tags accounts
+var (
+	Accounts = gin.Accounts{
+		"admin": "admin",
+	}
+)
+
+// GetLogin godoc
+// @Summary Login authorization
+// @Description Login authorization
+// @Tags auth
 // @Accept json
 // @Produce json
-// @Param id path int true "Account ID"
-// @Success 200 {object} model.Account
+// @Param Authorization header string true "Basic authorization"
+// @Success 200 {string} username
 // @Failure 400 {object} util.HTTPError
 // @Failure 404 {object} util.HTTPError
 // @Failure 500 {object} util.HTTPError
-// @Router /accounts/{id} [get]
-func (c *Controller) GetAccount(ctx *gin.Context) {
-	_id := ctx.Param("id")
-	id, err := strconv.Atoi(_id)
-	if err != nil {
-		util.NewError(ctx, http.StatusBadRequest, err)
-		return
-	}
-
-	account, err := model.AccountOne(id)
-	if err != nil {
-		util.NewError(ctx, http.StatusNotFound, err)
-		return
-	}
-
-	ctx.JSON(http.StatusOK, account)
+// @Router /auth/login [get]
+func (c *Controller) GetLogin(ctx *gin.Context) {
+	ctx.String(http.StatusOK, ctx.MustGet(gin.AuthUserKey).(string))
 }

@@ -23,11 +23,11 @@ import (
 
 // GetServerVersion godoc
 // @Summary Get server version
-// @Description get server version
+// @Description Get server version
 // @Tags config
 // @Accept json
 // @Produce json
-// @Success 200 {string} string model.Version
+// @Success 200 {string} model.Version
 // @Failure 400 {object} util.HTTPError
 // @Failure 404 {object} util.HTTPError
 // @Failure 500 {object} util.HTTPError

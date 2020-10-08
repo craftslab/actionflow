@@ -39,7 +39,7 @@ func TestRunRouter(t *testing.T) {
 	assert.Equal(t, nil, err)
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/login", nil)
+	req, _ := http.NewRequest("GET", "/auth/login", nil)
 	req.Header.Set("Authorization", auth("admin", "admin"))
 	r.engine.ServeHTTP(w, req)
 

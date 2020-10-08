@@ -59,7 +59,7 @@ func (r *Router) initRouter(cfg *config.Config) error {
 	r.config = *cfg
 
 	r.engine = gin.New()
-	r.engine.Use(gin.BasicAuth(gin.Accounts{"admin": "admin"}))
+	r.engine.Use(gin.BasicAuth(controller.Accounts))
 	r.engine.Use(gin.Logger())
 	r.engine.Use(gin.Recovery())
 
@@ -69,12 +69,11 @@ func (r *Router) initRouter(cfg *config.Config) error {
 func (r *Router) setRoute() error {
 	ctrl := controller.NewController()
 
-	r.engine.GET("/login", func(c *gin.Context) {
-		c.String(http.StatusOK, c.MustGet(gin.AuthUserKey).(string))
-	})
-
 	accounts := r.engine.Group("/accounts")
 	accounts.GET(":id", ctrl.GetAccount)
+
+	auth := r.engine.Group("/auth")
+	auth.GET("login", ctrl.GetLogin)
 
 	cfg := r.engine.Group("/config")
 	cfg.GET("server/version", ctrl.GetServerVersion)
