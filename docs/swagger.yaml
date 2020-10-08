@@ -34,6 +34,41 @@ info:
   title: ActionFlow REST API
   version: 0.0.1
 paths:
+  /accounts:
+    get:
+      consumes:
+      - application/json
+      description: Query account
+      parameters:
+      - description: Username search by q
+        in: query
+        name: q
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Account'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+      summary: Query account
+      tags:
+      - accounts
   /accounts/{id}:
     get:
       consumes:
