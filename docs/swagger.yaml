@@ -38,7 +38,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: get account by ID
+      description: Get account by ID
       parameters:
       - description: Account ID
         in: path
@@ -64,14 +64,47 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/util.HTTPError'
-      summary: Get account
+      summary: Get account by ID
       tags:
       - accounts
+  /auth/login:
+    get:
+      consumes:
+      - application/json
+      description: Login authorization
+      parameters:
+      - description: Basic authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.HTTPError'
+      summary: Login authorization
+      tags:
+      - auth
   /config/server/version:
     get:
       consumes:
       - application/json
-      description: get server version
+      description: Get server version
       produces:
       - application/json
       responses:

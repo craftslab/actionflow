@@ -35,7 +35,7 @@ var doc = `{
     "paths": {
         "/accounts/{id}": {
             "get": {
-                "description": "get account by ID",
+                "description": "Get account by ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -45,7 +45,7 @@ var doc = `{
                 "tags": [
                     "accounts"
                 ],
-                "summary": "Get account",
+                "summary": "Get account by ID",
                 "parameters": [
                     {
                         "type": "integer",
@@ -83,9 +83,59 @@ var doc = `{
                 }
             }
         },
+        "/auth/login": {
+            "get": {
+                "description": "Login authorization",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login authorization",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Basic authorization",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/config/server/version": {
             "get": {
-                "description": "get server version",
+                "description": "Get server version",
                 "consumes": [
                     "application/json"
                 ],
