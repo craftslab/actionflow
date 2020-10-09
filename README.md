@@ -60,14 +60,8 @@ Flags:
 
 - [Concourse](https://concourse-ci.org)
 - [Cycloid](https://cycloid.io)
-- [Terraform](https://www.terraform.io)
-
-
-
-## Thanks
-
-- [JWT in Gin](https://juejin.im/post/6844903905424310279)
 - [Swaggo](https://github.com/swaggo/swag/tree/master/example)
+- [Terraform](https://www.terraform.io)
 
 
 
