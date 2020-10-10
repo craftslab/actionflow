@@ -35,7 +35,7 @@ const (
 )
 
 type Router struct {
-	config config.Config
+	config *config.Config
 	engine *gin.Engine
 }
 
@@ -56,7 +56,7 @@ func Run(addr string, cfg *config.Config) error {
 func (r *Router) initRouter(cfg *config.Config) error {
 	gin.SetMode(gin.ReleaseMode)
 
-	r.config = *cfg
+	r.config = cfg
 
 	r.engine = gin.New()
 	r.engine.Use(gin.BasicAuth(controller.Accounts))
@@ -67,7 +67,7 @@ func (r *Router) initRouter(cfg *config.Config) error {
 }
 
 func (r *Router) setRoute() error {
-	ctrl := controller.NewController()
+	ctrl := controller.New()
 
 	accounts := r.engine.Group("/accounts")
 	accounts.GET(":id", ctrl.GetAccount)

@@ -12,14 +12,14 @@
 
 package config
 
-type Config struct {
-}
-
 var (
 	Build   string
 	Version string
 )
 
-func NewConfig() Config {
-	return Config{}
+type Config struct {
+}
+
+func New() *Config {
+	return &Config{}
 }

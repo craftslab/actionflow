@@ -40,15 +40,15 @@ func Run() {
 		log.Fatalf("failed to init doc: %v", err)
 	}
 
-	if err := runServer(&cfg); err != nil {
+	if err := runServer(cfg); err != nil {
 		log.Fatalf("failed to run server: %v", err)
 	}
 
 	log.Println("server exiting")
 }
 
-func initConfig() (config.Config, error) {
-	c := config.NewConfig()
+func initConfig() (*config.Config, error) {
+	c := config.New()
 
 	return c, nil
 }

@@ -29,10 +29,10 @@ func TestRunRouter(t *testing.T) {
 		return "Basic " + base64.StdEncoding.EncodeToString([]byte(base))
 	}
 
-	c := config.Config{}
+	c := config.New()
 	r := Router{}
 
-	err := r.initRouter(&c)
+	err := r.initRouter(c)
 	assert.Equal(t, nil, err)
 
 	err = r.setRoute()

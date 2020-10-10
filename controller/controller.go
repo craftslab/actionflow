@@ -15,6 +15,6 @@ package controller
 type Controller struct {
 }
 
-func NewController() *Controller {
+func New() *Controller {
 	return &Controller{}
 }
