@@ -13,9 +13,11 @@
 package router
 
 import (
-	"encoding/base64"
+	"bytes"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -23,50 +25,75 @@ import (
 	"actionflow/config"
 )
 
-func TestRunRouter(t *testing.T) {
-	auth := func(user, pass string) string {
-		base := user + ":" + pass
-		return "Basic " + base64.StdEncoding.EncodeToString([]byte(base))
-	}
+type Response struct {
+	Code   int    `json:"code"`
+	Expire string `json:"expire"`
+	Token  string `json:"token"`
+}
 
-	c := config.New()
+func TestRouter(t *testing.T) {
+	var err error
+	var rec *httptest.ResponseRecorder
+	var req *http.Request
+
 	r := Router{}
 
-	err := r.initRouter(c)
+	err = r.initAuth()
+	assert.Equal(t, nil, err)
+
+	err = r.initRoute()
 	assert.Equal(t, nil, err)
 
 	err = r.setRoute()
 	assert.Equal(t, nil, err)
 
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/accounts/1", nil)
-	req.Header.Set("Authorization", auth("admin", "admin"))
-	r.engine.ServeHTTP(w, req)
+	rec = httptest.NewRecorder()
+	data := url.Values{}
+	data.Set("username", "admin")
+	data.Set("password", "admin")
+	req, _ = http.NewRequest("POST", "/auth/login", bytes.NewBufferString(data.Encode()))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded; param=value")
+	r.engine.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusOK, w.Code)
-	assert.NotEqual(t, nil, w.Body.String())
+	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.NotEqual(t, nil, rec.Body.String())
 
-	w = httptest.NewRecorder()
+	var resp Response
+	decoder := json.NewDecoder(rec.Body)
+	err = decoder.Decode(&resp)
+	assert.Equal(t, nil, err)
+
+	token := resp.Token
+
+	rec = httptest.NewRecorder()
+	req, _ = http.NewRequest("GET", "/auth/refresh", nil)
+	req.Header.Set("Authorization", "Bearer "+token)
+	r.engine.ServeHTTP(rec, req)
+
+	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.NotEqual(t, nil, rec.Body.String())
+
+	rec = httptest.NewRecorder()
+	req, _ = http.NewRequest("GET", "/accounts/1", nil)
+	req.Header.Set("Authorization", "Bearer "+token)
+	r.engine.ServeHTTP(rec, req)
+
+	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.NotEqual(t, nil, rec.Body.String())
+
+	rec = httptest.NewRecorder()
 	req, _ = http.NewRequest("GET", "/accounts/?q=admin", nil)
-	req.Header.Set("Authorization", auth("admin", "admin"))
-	r.engine.ServeHTTP(w, req)
+	req.Header.Set("Authorization", "Bearer "+token)
+	r.engine.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusOK, w.Code)
-	assert.NotEqual(t, nil, w.Body.String())
+	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.NotEqual(t, nil, rec.Body.String())
 
-	w = httptest.NewRecorder()
-	req, _ = http.NewRequest("GET", "/auth/login", nil)
-	req.Header.Set("Authorization", auth("admin", "admin"))
-	r.engine.ServeHTTP(w, req)
-
-	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, "admin", w.Body.String())
-
-	w = httptest.NewRecorder()
+	rec = httptest.NewRecorder()
 	req, _ = http.NewRequest("GET", "/config/server/version", nil)
-	req.Header.Set("Authorization", auth("admin", "admin"))
-	r.engine.ServeHTTP(w, req)
+	req.Header.Set("Authorization", "Bearer "+token)
+	r.engine.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, "\""+config.Version+"-build-"+config.Build+"\"", w.Body.String())
+	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, "\""+config.Version+"-build-"+config.Build+"\"", rec.Body.String())
 }

@@ -26,8 +26,10 @@ import (
 	"github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
 
+	"actionflow/auth"
 	"actionflow/config"
 	"actionflow/controller"
+	"actionflow/util"
 )
 
 const (
@@ -35,14 +37,20 @@ const (
 )
 
 type Router struct {
+	auth   *auth.Auth
 	config *config.Config
 	engine *gin.Engine
 }
 
 func Run(addr string, cfg *config.Config) error {
 	r := Router{}
+	r.config = cfg
 
-	if err := r.initRouter(cfg); err != nil {
+	if err := r.initAuth(); err != nil {
+		return errors.Wrap(err, "failed to auth")
+	}
+
+	if err := r.initRoute(); err != nil {
 		return errors.Wrap(err, "failed to init")
 	}
 
@@ -53,13 +61,27 @@ func Run(addr string, cfg *config.Config) error {
 	return r.runRouter(addr)
 }
 
-func (r *Router) initRouter(cfg *config.Config) error {
+func (r *Router) initAuth() error {
+	r.auth = auth.New()
+	if r.auth == nil {
+		return errors.New("failed to new Auth")
+	}
+
+	if err := r.auth.Init(); err != nil {
+		return errors.Wrap(err, "failed to init Auth")
+	}
+
+	return nil
+}
+
+func (r *Router) initRoute() error {
 	gin.SetMode(gin.ReleaseMode)
 
-	r.config = cfg
-
 	r.engine = gin.New()
-	r.engine.Use(gin.BasicAuth(controller.Accounts))
+	if r.engine == nil {
+		return errors.New("failed to new gin")
+	}
+
 	r.engine.Use(gin.Logger())
 	r.engine.Use(gin.Recovery())
 
@@ -68,18 +90,28 @@ func (r *Router) initRouter(cfg *config.Config) error {
 
 func (r *Router) setRoute() error {
 	ctrl := controller.New()
+	if ctrl == nil {
+		return errors.New("failed to new controller")
+	}
+
+	_auth := r.engine.Group("/auth")
+	_auth.POST("login", r.auth.Middleware.LoginHandler)
+	_auth.GET("refresh", r.auth.Middleware.RefreshHandler)
 
 	accounts := r.engine.Group("/accounts")
+	accounts.Use(r.auth.Middleware.MiddlewareFunc())
 	accounts.GET(":id", ctrl.GetAccount)
 	accounts.GET("/", ctrl.QueryAccount)
 
-	auth := r.engine.Group("/auth")
-	auth.GET("login", ctrl.GetLogin)
-
 	cfg := r.engine.Group("/config")
+	cfg.Use(r.auth.Middleware.MiddlewareFunc())
 	cfg.GET("server/version", ctrl.GetServerVersion)
 
 	r.engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	r.engine.NoRoute(r.auth.Middleware.MiddlewareFunc(), func(ctx *gin.Context) {
+		util.NewError(ctx, http.StatusNotFound, errors.New("Page not found"))
+	})
 
 	return nil
 }

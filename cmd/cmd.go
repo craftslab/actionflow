@@ -13,6 +13,7 @@
 package cmd
 
 import (
+	"errors"
 	"log"
 	"os"
 
@@ -49,6 +50,9 @@ func Run() {
 
 func initConfig() (*config.Config, error) {
 	c := config.New()
+	if c == nil {
+		return nil, errors.New("faile to new config")
+	}
 
 	return c, nil
 }
