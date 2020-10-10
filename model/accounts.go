@@ -17,27 +17,30 @@ import (
 )
 
 type Account struct {
-	DisplayName string `json:"displayname"`
+	Displayname string `json:"displayname"`
 	Email       string `json:"email"`
 	Id          int    `json:"id"`
 	Name        string `json:"name"`
-	UserName    string `json:"username"`
+	Password    string `json:"password"`
+	Username    string `json:"username"`
 }
 
 var accounts = []Account{
 	{
-		DisplayName: "Administrator",
+		Displayname: "Administrator",
 		Email:       "",
 		Id:          1,
 		Name:        "Administrator",
-		UserName:    "admin",
+		Password:    "admin",
+		Username:    "admin",
 	},
 	{
-		DisplayName: "Super John",
+		Displayname: "Super John",
 		Email:       "john.doe@example.com",
 		Id:          2,
 		Name:        "John Doe",
-		UserName:    "john",
+		Password:    "john",
+		Username:    "john",
 	},
 }
 
@@ -51,16 +54,17 @@ func GetAccount(id int) (Account, error) {
 	return Account{}, errors.New("invalid id")
 }
 
-func QueryAccount(q string) ([]Account, error) {
+func QueryAccount(q string) (Account, error) {
 	if q == "" {
-		return []Account{}, errors.New("invalid query")
+		return Account{}, errors.New("invalid query")
 	}
 
-	var buf []Account
+	var buf Account
 
 	for k, v := range accounts {
-		if q == v.UserName {
-			buf = append(buf, accounts[k])
+		if q == v.Username {
+			buf = accounts[k]
+			break
 		}
 	}
 

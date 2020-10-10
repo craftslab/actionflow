@@ -59,7 +59,7 @@ func (c *Controller) GetAccount(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param q query string true "Username search by q"
-// @Success 200 {array} model.Account
+// @Success 200 {object} model.Account
 // @Failure 400 {object} util.HTTPError
 // @Failure 404 {object} util.HTTPError
 // @Failure 500 {object} util.HTTPError
@@ -67,11 +67,11 @@ func (c *Controller) GetAccount(ctx *gin.Context) {
 func (c *Controller) QueryAccount(ctx *gin.Context) {
 	q := ctx.Request.URL.Query().Get("q")
 
-	accounts, err := model.QueryAccount(q)
+	account, err := model.QueryAccount(q)
 	if err != nil {
 		util.NewError(ctx, http.StatusNotFound, err)
 		return
 	}
 
-	ctx.JSON(http.StatusOK, accounts)
+	ctx.JSON(http.StatusOK, account)
 }

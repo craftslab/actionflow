@@ -18,14 +18,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAccountOne(t *testing.T) {
+func TestGetAccount(t *testing.T) {
 	_, err := GetAccount(-1)
 	assert.NotEqual(t, nil, err)
 
 	_, err = GetAccount(1)
 	assert.Equal(t, nil, err)
+}
 
-	_, err = QueryAccount("")
+func TestQueryAccount(t *testing.T) {
+	_, err := QueryAccount("")
 	assert.NotEqual(t, nil, err)
 
 	_, err = QueryAccount("admin")

@@ -18,7 +18,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSystemVersion(t *testing.T) {
+func TestServerVersion(t *testing.T) {
 	_, err := ServerVersion()
 	assert.Equal(t, nil, err)
 }
