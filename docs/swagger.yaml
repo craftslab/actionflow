@@ -10,6 +10,8 @@ definitions:
         type: integer
       name:
         type: string
+      password:
+        type: string
       username:
         type: string
     type: object
@@ -51,9 +53,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/model.Account'
-            type: array
+            $ref: '#/definitions/model.Account'
         "400":
           description: Bad Request
           schema:
@@ -102,39 +102,6 @@ paths:
       summary: Get account by ID
       tags:
       - accounts
-  /auth/login:
-    get:
-      consumes:
-      - application/json
-      description: Login authorization
-      parameters:
-      - description: Basic authorization
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/util.HTTPError'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/util.HTTPError'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/util.HTTPError'
-      summary: Login authorization
-      tags:
-      - auth
   /config/server/version:
     get:
       consumes:

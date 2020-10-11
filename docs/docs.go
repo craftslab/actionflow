@@ -59,10 +59,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.Account"
-                            }
+                            "$ref": "#/definitions/model.Account"
                         }
                     },
                     "400": {
@@ -113,56 +110,6 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/model.Account"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/util.HTTPError"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/util.HTTPError"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/util.HTTPError"
-                        }
-                    }
-                }
-            }
-        },
-        "/auth/login": {
-            "get": {
-                "description": "Login authorization",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "auth"
-                ],
-                "summary": "Login authorization",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Basic authorization",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
                         }
                     },
                     "400": {
@@ -242,6 +189,9 @@ var doc = `{
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "password": {
                     "type": "string"
                 },
                 "username": {
