@@ -1,6 +1,7 @@
 # actionflow
 
 [![Actions Status](https://github.com/craftslab/actionflow/workflows/CI/badge.svg?branch=master&event=push)](https://github.com/craftslab/actionflow/actions?query=workflow%3ACI)
+[![Docker](https://img.shields.io/docker/pulls/craftslab/actionflow)](https://hub.docker.com/r/craftslab/actionflow)
 [![Go Report Card](https://goreportcard.com/badge/github.com/craftslab/actionflow)](https://goreportcard.com/report/github.com/craftslab/actionflow)
 [![License](https://img.shields.io/github/license/craftslab/actionflow.svg?color=brightgreen)](https://github.com/craftslab/actionflow/blob/master/LICENSE)
 [![Tag](https://img.shields.io/github/tag/craftslab/actionflow.svg?color=brightgreen)](https://github.com/craftslab/actionflow/tags)

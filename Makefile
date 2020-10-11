@@ -13,6 +13,9 @@ build: go-build
 clean: go-clean
 .PHONY: clean
 
+docker: go-docker
+.PHONY: docker
+
 lint: go-lint
 .PHONY: lint
 
@@ -30,6 +33,9 @@ go-build: FORCE
 
 go-clean: FORCE
 	./script/clean.sh
+
+go-docker: FORCE
+	./script/docker.sh $(VERSION)
 
 go-lint: FORCE
 	./script/lint.sh
