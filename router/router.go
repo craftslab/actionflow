@@ -21,6 +21,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"github.com/swaggo/files"
@@ -82,6 +83,7 @@ func (r *Router) initRoute() error {
 		return errors.New("failed to new gin")
 	}
 
+	r.engine.Use(cors.Default())
 	r.engine.Use(gin.Logger())
 	r.engine.Use(gin.Recovery())
 
