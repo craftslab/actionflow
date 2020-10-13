@@ -76,8 +76,6 @@ func (r *Router) initAuth() error {
 }
 
 func (r *Router) initRoute() error {
-	gin.SetMode(gin.ReleaseMode)
-
 	r.engine = gin.New()
 	if r.engine == nil {
 		return errors.New("failed to new gin")
