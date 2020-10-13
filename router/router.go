@@ -81,7 +81,18 @@ func (r *Router) initRoute() error {
 		return errors.New("failed to new gin")
 	}
 
-	r.engine.Use(cors.Default())
+	r.engine.Use(cors.New(cors.Config{
+		AllowCredentials: true,
+		AllowHeaders:     []string{"*"},
+		AllowMethods:     []string{"DELETE", "GET", "PATCH", "POST", "PUT"},
+		AllowOrigins:     []string{"*"},
+		AllowOriginFunc: func(origin string) bool {
+			return true
+		},
+		ExposeHeaders: []string{"Content-Type"},
+		MaxAge:        24 * time.Hour,
+	}))
+
 	r.engine.Use(gin.Logger())
 	r.engine.Use(gin.Recovery())
 
