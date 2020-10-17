@@ -17,6 +17,7 @@ import (
 )
 
 type Account struct {
+	Avatar      string `json:"avatar"`
 	Displayname string `json:"displayname"`
 	Email       string `json:"email"`
 	Id          int    `json:"id"`
@@ -27,26 +28,40 @@ type Account struct {
 
 var accounts = []Account{
 	{
+		Avatar:      "https://user-images.githubusercontent.com/334891/29999089-2837c968-9009-11e7-92c1-6a7540a594d5.png",
 		Displayname: "Administrator",
 		Email:       "",
-		Id:          1,
+		Id:          0,
 		Name:        "Administrator",
 		Password:    "admin",
 		Username:    "admin",
 	},
 	{
+		Avatar:      "https://user-images.githubusercontent.com/334891/29999089-2837c968-9009-11e7-92c1-6a7540a594d5.png",
 		Displayname: "Super John",
 		Email:       "john.doe@example.com",
-		Id:          2,
+		Id:          1,
 		Name:        "John Doe",
 		Password:    "john",
 		Username:    "john",
 	},
 }
 
+var selfId = 0
+
 func GetAccount(id int) (Account, error) {
 	for _, v := range accounts {
 		if id == v.Id {
+			return v, nil
+		}
+	}
+
+	return Account{}, errors.New("invalid id")
+}
+
+func GetSelfAccount() (Account, error) {
+	for _, v := range accounts {
+		if selfId == v.Id {
 			return v, nil
 		}
 	}

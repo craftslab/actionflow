@@ -26,6 +26,11 @@ func TestGetAccount(t *testing.T) {
 	assert.Equal(t, nil, err)
 }
 
+func TestGetSelfAccount(t *testing.T) {
+	_, err := GetSelfAccount()
+	assert.Equal(t, nil, err)
+}
+
 func TestQueryAccount(t *testing.T) {
 	_, err := QueryAccount("")
 	assert.NotEqual(t, nil, err)

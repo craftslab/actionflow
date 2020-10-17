@@ -35,21 +35,25 @@ import (
 // @Failure 500 {object} util.HTTPError
 // @Router /accounts/{id} [get]
 func (c *Controller) GetAccount(ctx *gin.Context) {
-	_id := ctx.Param("id")
+	param := ctx.Param("id")
 
-	id, err := strconv.Atoi(_id)
-	if err != nil {
-		util.NewError(ctx, http.StatusBadRequest, err)
-		return
+	if param == "self" {
+		if account, err := model.GetSelfAccount(); err == nil {
+			ctx.JSON(http.StatusOK, account)
+		} else {
+			util.NewError(ctx, http.StatusNotFound, err)
+		}
+	} else {
+		if id, err := strconv.Atoi(param); err == nil {
+			if account, e := model.GetAccount(id); e == nil {
+				ctx.JSON(http.StatusOK, account)
+			} else {
+				util.NewError(ctx, http.StatusNotFound, e)
+			}
+		} else {
+			util.NewError(ctx, http.StatusBadRequest, err)
+		}
 	}
-
-	account, err := model.GetAccount(id)
-	if err != nil {
-		util.NewError(ctx, http.StatusNotFound, err)
-		return
-	}
-
-	ctx.JSON(http.StatusOK, account)
 }
 
 // QueryAccount godoc

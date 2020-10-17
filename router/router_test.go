@@ -82,6 +82,14 @@ func TestRouter(t *testing.T) {
 	assert.NotEqual(t, nil, rec.Body.String())
 
 	rec = httptest.NewRecorder()
+	req, _ = http.NewRequest("GET", "/accounts/self", nil)
+	req.Header.Set("Authorization", "Bearer "+token)
+	r.engine.ServeHTTP(rec, req)
+
+	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.NotEqual(t, nil, rec.Body.String())
+
+	rec = httptest.NewRecorder()
 	req, _ = http.NewRequest("GET", "/accounts/?q=admin", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 	r.engine.ServeHTTP(rec, req)
