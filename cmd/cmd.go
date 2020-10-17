@@ -66,5 +66,10 @@ func initDoc() error {
 }
 
 func runServer(cfg *config.Config) error {
-	return router.Run(*addr, cfg)
+	r := router.New()
+	if r == nil {
+		return errors.New("faile to new router")
+	}
+
+	return r.Run(*addr, cfg)
 }

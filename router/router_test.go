@@ -25,6 +25,10 @@ import (
 	"actionflow/config"
 )
 
+var (
+	token string
+)
+
 type Response struct {
 	Code   int    `json:"code"`
 	Expire string `json:"expire"`
@@ -32,13 +36,9 @@ type Response struct {
 }
 
 func TestRouter(t *testing.T) {
-	var err error
-	var rec *httptest.ResponseRecorder
-	var req *http.Request
+	r := New()
 
-	r := Router{}
-
-	err = r.initAuth()
+	err := r.initAuth()
 	assert.Equal(t, nil, err)
 
 	err = r.initRoute()
@@ -47,61 +47,71 @@ func TestRouter(t *testing.T) {
 	err = r.setRoute()
 	assert.Equal(t, nil, err)
 
-	rec = httptest.NewRecorder()
+	testAuth(r, t)
+	testAccounts(r, t)
+	testConfig(r, t)
+}
+
+func testAuth(r *Router, t *testing.T) {
+	// Test: /auth/login
+	rec := httptest.NewRecorder()
 	data := url.Values{}
 	data.Set("username", "admin")
 	data.Set("password", "admin")
-	req, _ = http.NewRequest("POST", "/auth/login", bytes.NewBufferString(data.Encode()))
+	req, _ := http.NewRequest("POST", "/auth/login", bytes.NewBufferString(data.Encode()))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded; param=value")
 	r.engine.ServeHTTP(rec, req)
-
 	assert.Equal(t, http.StatusOK, rec.Code)
 	assert.NotEqual(t, nil, rec.Body.String())
 
 	var resp Response
 	decoder := json.NewDecoder(rec.Body)
-	err = decoder.Decode(&resp)
+	err := decoder.Decode(&resp)
 	assert.Equal(t, nil, err)
 
-	token := resp.Token
+	token = resp.Token
 
+	// Test: /auth/refresh
 	rec = httptest.NewRecorder()
 	req, _ = http.NewRequest("GET", "/auth/refresh", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 	r.engine.ServeHTTP(rec, req)
-
 	assert.Equal(t, http.StatusOK, rec.Code)
 	assert.NotEqual(t, nil, rec.Body.String())
+}
 
-	rec = httptest.NewRecorder()
-	req, _ = http.NewRequest("GET", "/accounts/1", nil)
+func testAccounts(r *Router, t *testing.T) {
+	// Test: /accounts/1
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/accounts/1", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 	r.engine.ServeHTTP(rec, req)
-
 	assert.Equal(t, http.StatusOK, rec.Code)
 	assert.NotEqual(t, nil, rec.Body.String())
 
+	// Test: /accounts/self
 	rec = httptest.NewRecorder()
 	req, _ = http.NewRequest("GET", "/accounts/self", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 	r.engine.ServeHTTP(rec, req)
-
 	assert.Equal(t, http.StatusOK, rec.Code)
 	assert.NotEqual(t, nil, rec.Body.String())
 
+	// Test: /accounts/?q=admin
 	rec = httptest.NewRecorder()
 	req, _ = http.NewRequest("GET", "/accounts/?q=admin", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 	r.engine.ServeHTTP(rec, req)
-
 	assert.Equal(t, http.StatusOK, rec.Code)
 	assert.NotEqual(t, nil, rec.Body.String())
+}
 
-	rec = httptest.NewRecorder()
-	req, _ = http.NewRequest("GET", "/config/server/version", nil)
+func testConfig(r *Router, t *testing.T) {
+	// Test: /config/server/version
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/config/server/version", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 	r.engine.ServeHTTP(rec, req)
-
 	assert.Equal(t, http.StatusOK, rec.Code)
 	assert.Equal(t, "\""+config.Version+"-build-"+config.Build+"\"", rec.Body.String())
 }

@@ -43,8 +43,11 @@ type Router struct {
 	engine *gin.Engine
 }
 
-func Run(addr string, cfg *config.Config) error {
-	r := Router{}
+func New() *Router {
+	return &Router{}
+}
+
+func (r *Router) Run(addr string, cfg *config.Config) error {
 	r.config = cfg
 
 	if err := r.initAuth(); err != nil {
