@@ -1,4 +1,4 @@
-module actionflow
+module github.com/craftslab/actionflow
 
 go 1.15
 
@@ -12,6 +12,6 @@ require (
 	github.com/stretchr/testify v1.6.1
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
 	github.com/swaggo/gin-swagger v1.2.0
-	github.com/swaggo/swag v1.6.7
+	github.com/swaggo/swag v1.6.9
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 )

@@ -13,7 +13,7 @@
 package model
 
 import (
-	"actionflow/config"
+	"github.com/craftslab/actionflow/config"
 )
 
 var (

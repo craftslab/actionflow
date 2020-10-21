@@ -17,8 +17,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"actionflow/model"
-	"actionflow/util"
+	"github.com/craftslab/actionflow/model"
+	"github.com/craftslab/actionflow/util"
 )
 
 // GetServerVersion godoc

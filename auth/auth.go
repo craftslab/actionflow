@@ -19,8 +19,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 
-	"actionflow/model"
-	"actionflow/util"
+	"github.com/craftslab/actionflow/model"
+	"github.com/craftslab/actionflow/util"
 )
 
 const (

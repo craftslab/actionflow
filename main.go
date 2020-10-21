@@ -15,7 +15,7 @@ package main
 import (
 	"os"
 
-	"actionflow/cmd"
+	"github.com/craftslab/actionflow/cmd"
 )
 
 // @title ActionFlow REST API

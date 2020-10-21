@@ -179,6 +179,9 @@ var doc = `{
         "model.Account": {
             "type": "object",
             "properties": {
+                "avatar": {
+                    "type": "string"
+                },
                 "displayname": {
                     "type": "string"
                 },

@@ -19,9 +19,9 @@ import (
 
 	"gopkg.in/alecthomas/kingpin.v2"
 
-	"actionflow/config"
-	"actionflow/docs"
-	"actionflow/router"
+	"github.com/craftslab/actionflow/config"
+	"github.com/craftslab/actionflow/docs"
+	"github.com/craftslab/actionflow/router"
 )
 
 var (

@@ -27,10 +27,10 @@ import (
 	"github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
 
-	"actionflow/auth"
-	"actionflow/config"
-	"actionflow/controller"
-	"actionflow/util"
+	"github.com/craftslab/actionflow/auth"
+	"github.com/craftslab/actionflow/config"
+	"github.com/craftslab/actionflow/controller"
+	"github.com/craftslab/actionflow/util"
 )
 
 const (
