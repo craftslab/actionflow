@@ -51,7 +51,7 @@ func Run() {
 func initConfig() (*config.Config, error) {
 	c := config.New()
 	if c == nil {
-		return nil, errors.New("faile to new config")
+		return nil, errors.New("failed to new config")
 	}
 
 	return c, nil
@@ -68,7 +68,7 @@ func initDoc() error {
 func runServer(cfg *config.Config) error {
 	r := router.New()
 	if r == nil {
-		return errors.New("faile to new router")
+		return errors.New("failed to new router")
 	}
 
 	return r.Run(*addr, cfg)
