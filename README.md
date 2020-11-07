@@ -36,6 +36,18 @@ make build
 
 
 
+### Docker
+
+```
+git clone https://github.com/craftslab/actionflow.git
+
+cd actionflow
+docker build --no-cache -f Dockerfile -t craftslab/actionflow:latest .
+docker run -it -p 9090:9090 craftslab/actionflow:latest ./actionflow
+```
+
+
+
 ## Usage
 
 ```bash
