@@ -23,7 +23,7 @@ See *[actionview](https://github.com/craftslab/actionview/)* as a view of *actio
 
 
 
-## Running
+## Run
 
 ```bash
 git clone https://github.com/craftslab/actionflow.git
@@ -69,15 +69,15 @@ Flags:
 
 
 
+## License
+
+Project License can be found [here](LICENSE).
+
+
+
 ## Reference
 
 - [Concourse](https://concourse-ci.org)
 - [Cycloid](https://cycloid.io)
 - [Swaggo](https://github.com/swaggo/swag/tree/master/example)
 - [Terraform](https://www.terraform.io)
-
-
-
-## License
-
-Project License can be found [here](LICENSE).
