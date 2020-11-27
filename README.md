@@ -10,9 +10,9 @@
 
 ## Introduction
 
-*Action Flow* is a pipeline action server written in Go.
+*actionflow* is a pipeline action server written in Go.
 
-See *[Action View](https://github.com/craftslab/actionview/)* as a view of *Action Flow*.
+See *[actionview](https://github.com/craftslab/actionview/)* as a view of *actionflow*.
 
 
 
